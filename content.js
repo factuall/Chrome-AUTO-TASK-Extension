@@ -37,7 +37,8 @@ chrome.runtime.onMessage.addListener(
                 sendMessageToAddon("loadedFromJSON");
                 loadedFromJSON = false;
             }
-            sendMessageToAddon(isAddonRecording ? "state:recording" : "state:idle");
+            sendMessageToAddon(executingTask ? "state:executing" : (isAddonRecording ? "state:recording" : "state:idle"));
+
         }else if(Array.isArray(request.content)){
             recordedTaskSteps = request.content;
             executeTask();
@@ -102,11 +103,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
   
+var executingTask = false;
 const executeTask = async function(){
+    executingTask = true;
     for (let index = 0; index < recordedTaskSteps.length; index++) {
         const step = recordedTaskSteps[index];
         await sleep(step.wait);
         click(step.left + 5, step.top + 5);   
         console.log("clicking",step.left,step.top);
     }
+    executingTask = false;
+    sendMessageToAddon("state:idle");
 }

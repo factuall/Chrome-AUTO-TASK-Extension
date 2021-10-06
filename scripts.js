@@ -24,6 +24,7 @@ stopRecButton.addEventListener('click', async () =>{
 //execute button clicked
 executeTaskButton.addEventListener('click', async () =>{
     sendMessageToTab(taskSteps);
+    sendMessageToTab("stateCheck");
 });
 
 //clear steps list and remove it from local storage 
@@ -56,12 +57,17 @@ chrome.runtime.onMessage.addListener(
             renderSteps();
         }else if(request.content.constructor === String){
             if(request.content == "state:idle"){
-                stateBox.innerHTML = "Addon ready";
+                stateBox.innerHTML = "Idle";
+                stateBox.style.backgroundColor = "bisque";
             }else if(request.content == "state:recording"){
                 stateBox.innerHTML = "Recording in progress";
+                stateBox.style.backgroundColor = "#ff6666";
             }else if(request.content == "loadedFromJSON"){
                 sendMessageToTab("stopRecording");
                 sendMessageToTab("stateCheck");
+            }else if(request.content == "state:executing"){
+                stateBox.innerHTML = "Executing task";
+                stateBox.style.backgroundColor = "#99ffcc";
             }
         }
     }
