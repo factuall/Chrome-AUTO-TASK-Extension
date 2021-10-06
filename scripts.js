@@ -7,6 +7,7 @@ var startRecButton = document.getElementById("startRecording");
 var stopRecButton = document.getElementById("stopRecording");
 var tasksStepsList = document.getElementById("taskStepsList");
 var clearStepsButton = document.getElementById("clearRecording");
+var executeTaskButton = document.getElementById("doTask");
 
 //record button clicked
 startRecButton.addEventListener('click', async () =>{
@@ -20,6 +21,11 @@ stopRecButton.addEventListener('click', async () =>{
     sendMessageToTab("stateCheck");
 });
 
+//execute button clicked
+executeTaskButton.addEventListener('click', async () =>{
+    sendMessageToTab(taskSteps);
+});
+
 //clear steps list and remove it from local storage 
 //chrome allows us to store whole objects in extension storage
 //so we don't have to store it in strings
@@ -28,6 +34,8 @@ clearStepsButton.addEventListener('click', async () =>{
     taskSteps = [];
     renderSteps();
 });
+
+
 
 //send message to JS running site-side
 function sendMessageToTab(messageContent){

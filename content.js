@@ -38,6 +38,9 @@ chrome.runtime.onMessage.addListener(
                 loadedFromJSON = false;
             }
             sendMessageToAddon(isAddonRecording ? "state:recording" : "state:idle");
+        }else if(Array.isArray(request.content)){
+            recordedTaskSteps = request.content;
+            executeTask();
         }
     }
 );
@@ -93,4 +96,17 @@ if(localStorage.unloadedWhileRecording == "true"){
         localStorage.recordedTaskSteps = "none";
     }
     
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  
+const executeTask = async function(){
+    for (let index = 0; index < recordedTaskSteps.length; index++) {
+        const step = recordedTaskSteps[index];
+        await sleep(step.wait);
+        click(step.left + 5, step.top + 5);   
+        console.log("clicking",step.left,step.top);
+    }
 }
