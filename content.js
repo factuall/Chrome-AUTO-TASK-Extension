@@ -33,6 +33,10 @@ chrome.runtime.onMessage.addListener(
             isAddonRecording = false;
         }else if(request.content == "stateCheck"){
             //gui after closing and opening forgets everything so we ask site for state
+            if(loadedFromJSON){
+                sendMessageToAddon("loadedFromJSON");
+                loadedFromJSON = false;
+            }
             sendMessageToAddon(isAddonRecording ? "state:recording" : "state:idle");
         }
     }
@@ -72,6 +76,21 @@ function getOffset( el ) {
 }
 
 //save when recording and clicked redirect
-window.onunload = function() {
-    if(isAddonRecording) sendMessageToAddon(recordedTaskSteps);
+window.onbeforeunload = function(){
+    if(isAddonRecording){
+        localStorage.unloadedWhileRecording = "true";
+        localStorage.recordedTaskSteps = JSON.stringify(recordedTaskSteps);
+    }
+}
+
+var loadedFromJSON = false;
+if(localStorage.unloadedWhileRecording == "true"){
+    if(localStorage.recordedTaskSteps != "none"){
+        recordedTaskSteps = JSON.parse(localStorage.recordedTaskSteps);
+        localStorage.unloadedWhileRecording = "false";
+        isAddonRecording = true;
+        loadedFromJSON = true;
+        localStorage.recordedTaskSteps = "none";
+    }
+    
 }

@@ -51,6 +51,9 @@ chrome.runtime.onMessage.addListener(
                 stateBox.innerHTML = "Addon ready";
             }else if(request.content == "state:recording"){
                 stateBox.innerHTML = "Recording in progress";
+            }else if(request.content == "loadedFromJSON"){
+                sendMessageToTab("stopRecording");
+                sendMessageToTab("stateCheck");
             }
         }
     }
@@ -89,3 +92,5 @@ function renderSteps(){
         stepLine.append("Wait: " + element.wait/1000 + "s then click on X:" + element.left + " Y:" + element.top);
     });
 }
+
+sendMessageToTab("stateCheck");
