@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Cheil Click Helper",
+  "version": "0.5",
+  "author": "Adrian Factuall Nieściur",
+  "description": "Anti-time-waster",
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Open Cheil Click Helper to start recording and performing tasks."
+  }
+}

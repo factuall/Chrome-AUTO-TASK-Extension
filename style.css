@@ -1,0 +1,39 @@
+body{
+    width: 390px;
+    height: auto;
+}
+button{
+    width: 190px;
+    height: 30px;
+}
+/*this div contains only buttons and state box, ignore name*/
+#addoncontent{
+    margin: auto;
+    background-color:#fff;
+    display:grid;
+    grid-template-columns: 190px 20px;
+    grid-row: auto auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    margin-bottom: 10px;
+}
+#state{
+    width: 388px;
+    height: 24px;
+    background-color: bisque;
+    border: 1px solid black;
+    text-align: center;
+    font-size: large;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+/*container for task steps*/
+#taskStepsList{
+    font-size: 20px;
+    background-color: rgb(220,220,220);
+    padding-bottom: 5px;
+}
+#stepLine{
+    font-size: 14px;
+    line-height: 14px;
+}
