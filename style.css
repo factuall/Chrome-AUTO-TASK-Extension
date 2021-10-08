@@ -7,7 +7,7 @@ button{
     height: 30px;
 }
 /*this div contains only buttons and state box, ignore name*/
-#addoncontent{
+.addoncontent{
     margin: auto;
     background-color:#fff;
     display:grid;
@@ -15,6 +15,16 @@ button{
     grid-row: auto auto;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
+    margin-bottom: 10px;
+}
+.options{
+    margin: auto;
+    background-color:#fff;
+    display:grid;
+    grid-template-columns: 190px 10px;
+    grid-row: auto auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 0px;
     margin-bottom: 10px;
 }
 #state{
@@ -36,4 +46,7 @@ button{
 #stepLine{
     font-size: 14px;
     line-height: 14px;
+}
+#option{
+    width: 190px;
 }
