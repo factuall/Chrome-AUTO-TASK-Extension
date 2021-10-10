@@ -6,18 +6,24 @@ var stateBox = document.getElementById("state");
 var tasksStepsList = document.getElementById("taskStepsList");
 
 //options
-var optionContinue = document.getElementById("optionContinue");
-var flagContinue = false;
-optionContinue.addEventListener('change', async (event) =>{
-    flagContinue = event.currentTarget.checked;
-    chrome.storage.local.set({optionContinue: flagContinue}, function() {});
-});
-chrome.storage.local.get(['optionContinue'], function(result) {
-    if(result.optionContinue == true){
-        flagContinue = true;
-        optionContinue.checked = true;
-    }
-});
+var optionInputs = document.getElementsByClassName('optionInput');
+var optionFlags = [];
+optionFlags.length = optionInputs.length;
+for (let optionIndex = 0; optionIndex < optionInputs.length; optionIndex++) {
+    const element = optionInputs[optionIndex];
+    element.addEventListener('change', async (event) =>{
+        optionFlags[optionIndex] = event.currentTarget.checked;
+        let key = {};
+        key[("option" + optionIndex)] = optionFlags[optionIndex];
+        chrome.storage.local.set(key, function() {});
+    });
+    chrome.storage.local.get(["option" + optionIndex], function(result) {
+        if(result[("option" + optionIndex)] == true){
+            optionFlags[optionIndex] = true;
+            optionInputs[optionIndex].checked = true;
+        }
+    });
+}
 
 //record button
 var startRecButton = document.getElementById("startRecording");
