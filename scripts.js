@@ -3,25 +3,38 @@ var taskSteps = [];
 
 //html elements
 var stateBox = document.getElementById("state");
-var startRecButton = document.getElementById("startRecording");
-var stopRecButton = document.getElementById("stopRecording");
 var tasksStepsList = document.getElementById("taskStepsList");
-var clearStepsButton = document.getElementById("clearRecording");
-var executeTaskButton = document.getElementById("doTask");
 
-//record button clicked
+//options
+var optionContinue = document.getElementById("optionContinue");
+var flagContinue = false;
+optionContinue.addEventListener('change', async (event) =>{
+    flagContinue = event.currentTarget.checked;
+    chrome.storage.local.set({optionContinue: flagContinue}, function() {});
+});
+chrome.storage.local.get(['optionContinue'], function(result) {
+    if(result.optionContinue == true){
+        flagContinue = true;
+        optionContinue.checked = true;
+    }
+});
+
+//record button
+var startRecButton = document.getElementById("startRecording");
 startRecButton.addEventListener('click', async () =>{
     sendMessageToTab("startRecording");
     sendMessageToTab("stateCheck");
 });
 
 //stop button clicked
+var stopRecButton = document.getElementById("stopRecording");
 stopRecButton.addEventListener('click', async () =>{
     sendMessageToTab("stopRecording");
     sendMessageToTab("stateCheck");
 });
 
 //execute button clicked
+var executeTaskButton = document.getElementById("doTask");
 executeTaskButton.addEventListener('click', async () =>{
     sendMessageToTab(taskSteps);
     sendMessageToTab("stateCheck");
@@ -30,6 +43,7 @@ executeTaskButton.addEventListener('click', async () =>{
 //clear steps list and remove it from local storage 
 //chrome allows us to store whole objects in extension storage
 //so we don't have to store it in strings
+var clearStepsButton = document.getElementById("clearRecording");
 clearStepsButton.addEventListener('click', async () =>{
     chrome.storage.local.set({taskStepsStorage: []}, function() {});
     taskSteps = [];
