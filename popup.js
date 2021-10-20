@@ -48,7 +48,8 @@ executeTaskButton.addEventListener('click', async () =>{
 
 //clear steps list and remove it from local storage 
 //chrome allows us to store whole objects in extension storage
-//so we don't have to store it in strings
+//so we don't have to store it in string 
+
 var clearStepsButton = document.getElementById("clearRecording");
 clearStepsButton.addEventListener('click', async () =>{
     chrome.storage.local.set({taskStepsStorage: []}, function() {});
@@ -95,7 +96,7 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
-
+/*
 //check on opening popup if there's a task in extension storage
 chrome.storage.local.get(['taskStepsStorage'], function(result) {
     console.log('Value currently is ' + result.taskStepsStorage);
@@ -107,7 +108,7 @@ chrome.storage.local.get(['taskStepsStorage'], function(result) {
     }
     renderSteps();
 });
-
+*/
 //appending all task steps to GUI
 function renderSteps(){
     tasksStepsList.innerHTML = "";
@@ -129,5 +130,3 @@ function renderSteps(){
         stepLine.append("Wait: " + element.wait/1000 + "s then click on X:" + element.left + " Y:" + element.top);
     });
 }
-
-sendMessageToTab("stateCheck");

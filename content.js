@@ -115,3 +115,11 @@ const executeTask = async function(){
     executingTask = false;
     sendMessageToAddon("state:idle");
 }
+
+/*chrome.runtime.sendMessage({message: "hi"}, function(response) {});
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log(request.message);
+    }
+  );*/
