@@ -23,6 +23,10 @@ document.body.addEventListener("click", function (evt) {
 //handle messages from addon gui/popup
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        if(request.message.startsWith("gui-")){
+            console.log("got the gui message");
+        }
+        return;
         console.log(request.content);
         if(request.content == "startRecording"){
             isAddonRecording = true;

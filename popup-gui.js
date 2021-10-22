@@ -35,7 +35,7 @@ clearStepsButton.addEventListener('click', async () =>{
 });
 
 function shareMessage(messageContent){
-    chrome.runtime.sendMessage({content: messageContent}, function(response) {});
+    chrome.runtime.sendMessage({message: messageContent}, function(response) {});
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
