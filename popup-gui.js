@@ -5,44 +5,37 @@ var taskSteps = [];
 
 //record button
 var startRecButton = document.getElementById("startRecording");
-startRecButton.addEventListener('click', async () =>{
-    //sendMessageToTab("startRecording");
-    //sendMessageToTab("stateCheck");    
-    shareMessage("gui-recording");
+startRecButton.addEventListener('click', async () =>{ 
+    sendToAddon("gui-recording");
 });
 
 //stop button clicked
 var stopRecButton = document.getElementById("stopRecording");
 stopRecButton.addEventListener('click', async () =>{
-    //sendMessageToTab("stopRecording");
-    //sendMessageToTab("stateCheck");
-    shareMessage("gui-stop");
+    sendToAddon("gui-stop");
 });
 
 //execute button clicked
 var executeTaskButton = document.getElementById("doTask");
 executeTaskButton.addEventListener('click', async () =>{
-    //sendMessageToTab(taskSteps);
-    //sendMessageToTab("stateCheck");
-    shareMessage("gui-play");
+    sendToAddon("gui-play");
 });
 
 var clearStepsButton = document.getElementById("clearRecording");
 clearStepsButton.addEventListener('click', async () =>{
-    //chrome.storage.local.set({taskStepsStorage: []}, function() {});
     taskSteps = [];
     renderSteps();
-    shareMessage("gui-clear");
+    sendToAddon("gui-clear");
 });
 
-function shareMessage(messageContent){
+function sendToAddon(messageContent){
     chrome.runtime.sendMessage({message: messageContent}, function(response) {});
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(Array.isArray(request.message)){
-            taskSteps = request.message;
-            renderSteps();
+        taskSteps = request.message;
+        renderSteps();
     }
 });
 
@@ -68,4 +61,4 @@ function renderSteps(){
 
 
 //on popup
-shareMessage("gui-popup");
+sendToAddon("gui-popup");

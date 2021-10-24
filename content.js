@@ -18,9 +18,9 @@ document.addEventListener('mousemove', (event) => {
 //all info while recording is saved to array
 document.body.addEventListener("click", function (evt) {
     if(isAddonRecording){
+        
         //object with coords .left .top
         let step = getOffset(evt.target);
-
         //don't record delay on first click
         if(recordedTaskSteps.length != 0){
             endTime = new Date().getTime();
@@ -31,6 +31,11 @@ document.body.addEventListener("click", function (evt) {
         step.left = MOUSE.x;
         step.scroll = window.pageYOffset;
         startTime = new Date().getTime();
+        if(recordedTaskSteps.length > 0){
+            if(step.top == recordedTaskSteps[recordedTaskSteps.length-1].top &&
+                step.left == recordedTaskSteps[recordedTaskSteps.length-1].left) return;
+        }
+
         recordedTaskSteps.push(step);
     }
 });
