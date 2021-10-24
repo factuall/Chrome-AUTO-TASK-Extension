@@ -30,8 +30,8 @@ executeTaskButton.addEventListener('click', async () =>{
 var clearStepsButton = document.getElementById("clearRecording");
 clearStepsButton.addEventListener('click', async () =>{
     //chrome.storage.local.set({taskStepsStorage: []}, function() {});
-    //taskSteps = [];
-    //renderSteps();
+    taskSteps = [];
+    renderSteps();
     shareMessage("gui-clear");
 });
 

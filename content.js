@@ -2,6 +2,8 @@ var isAddonRecording = false;
 var recordedTaskSteps = [];
 var startTime = 0;
 var endTime = 0;
+var executingTask = false;
+var index = 0;
 
 const MOUSE = {
     x: 0,
@@ -25,8 +27,9 @@ document.body.addEventListener("click", function (evt) {
         }
         //add delay to the object
         step.wait = endTime - startTime;
-        step.top = MOUSE.x;
-        step.left = MOUSE.y;
+        step.top = MOUSE.y;
+        step.left = MOUSE.x;
+        step.scroll = window.pageYOffset;
         startTime = new Date().getTime();
         recordedTaskSteps.push(step);
     }
@@ -37,13 +40,11 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(Array.isArray(request.message)){
             recordedTaskSteps = request.message;
-            executeTask();
         }
         if(request.message.startsWith("gui-")){
             switch(request.message){
                 case "gui-recording":
                     console.log("recordiiing");
-                    recordedTaskSteps = [];
                     isAddonRecording = true;
                     startTime = new Date().getTime();
                     endTime = new Date().getTime();
@@ -53,28 +54,19 @@ chrome.runtime.onMessage.addListener(
                     isAddonRecording = false;
                     sendMessageToAddon(recordedTaskSteps);
                 break;             
+                case "gui-clear":
+                    recordedTaskSteps = [];
+                break;
+                case "gui-play":
+                    executingTask = true;
+                    executeTask();
+                break;
             }
         }
-        return;
-        console.log(request.content);
-        if(request.content == "startRecording"){
-            isAddonRecording = true;
-            startTime = new Date().getTime();
-            endTime = new Date().getTime();
-        }else if(request.content == "stopRecording"){
-            sendMessageToAddon(recordedTaskSteps);
-            isAddonRecording = false;
-        }else if(request.content == "stateCheck"){
-            //gui after closing and opening forgets everything so we ask site for state
-            if(loadedFromJSON){
-                sendMessageToAddon("loadedFromJSON");
-                loadedFromJSON = false;
-            }
-            sendMessageToAddon(executingTask ? "state:executing" : (isAddonRecording ? "state:recording" : "state:idle"));
-
-        }else if(Array.isArray(request.content)){
-            recordedTaskSteps = request.content;
-            executeTask();
+        if(request.message.startsWith("index-")){
+            let i = request.message.substring(6);
+            index = parseInt(i);
+            console.log(index);
         }
     }
 );
@@ -117,45 +109,34 @@ function getOffset( el ) {
 //save when recording and clicked redirect
 window.onbeforeunload = function(){
     if(isAddonRecording){
-        localStorage.unloadedWhileRecording = "true";
-        localStorage.recordedTaskSteps = JSON.stringify(recordedTaskSteps);
+        sendMessageToAddon(recordedTaskSteps);
+        sendMessageToAddon("bg-unloading-while-recording");
     }
-}
-
-var loadedFromJSON = false;
-if(localStorage.unloadedWhileRecording == "true"){
-    if(localStorage.recordedTaskSteps != "none"){
-        recordedTaskSteps = JSON.parse(localStorage.recordedTaskSteps);
-        localStorage.unloadedWhileRecording = "false";
-        isAddonRecording = true;
-        loadedFromJSON = true;
-        localStorage.recordedTaskSteps = "none";
+    if(executingTask){
+        console.log(index);
+        sendMessageToAddon("bg-unloading-while-playing-" + (index+1));
     }
-    
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
   
-var executingTask = false;
+
 const executeTask = async function(){
-    executingTask = true;
     console.log("executing");
-    for (let index = 0; index < recordedTaskSteps.length; index++) {
+    for (index; index < recordedTaskSteps.length; index++) {
+        if(!executingTask){
+            break;
+        }
         const step = recordedTaskSteps[index];
         await sleep(step.wait);
+        window.scrollTo(0, step.scroll);
+        await sleep(10);
         click(step.left, step.top);   
         console.log("clicking",step.left,step.top);
     }
     executingTask = false;
-    //sendMessageToAddon("state:idle");
 }
 
-/*chrome.runtime.sendMessage({message: "hi"}, function(response) {});
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        console.log(request.message);
-    }
-  );*/
+sendMessageToAddon("bg-loaded");
