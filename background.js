@@ -6,10 +6,11 @@
 // Description: Handles all the browser level activities (e.g. tab management, etc.)
 // License: MIT
 var addonState = "";
+var taskSteps = [];
 
 //send message to JS running site-side
 function sendToPopup(messageContent){
-    chrome.runtime.sendMessage({content: messageContent}, (r) => {});
+    chrome.runtime.sendMessage({message: messageContent}, (r) => {});
 }
 
 function sendToTab(messageContent){
@@ -21,23 +22,32 @@ function sendToTab(messageContent){
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log(request.message);
-    if(request.message.startsWith('gui-')){
+    if(Array.isArray(request.message)){
+        taskSteps = request.message;
+    }else if(request.message.startsWith('gui-')){
+        console.log(request.message);
+        if(request.message == "gui-popup"){
+            console.log(taskSteps);
+            sendToPopup(taskSteps);
+        }
         changeState(request.message);
     }
 });
 
 function changeState(newState){
     addonState = newState;
-    console.log(newState);
     let passStateToSite = false;
     switch(newState){
         case "gui-recording":
             passStateToSite = true;
         break;
         case "gui-stop":
+            passStateToSite = true;
         break;
         case "gui-play":
+            console.log("playing");
+            console.log(taskSteps);
+            sendToTab(taskSteps);
         break;
         case "gui-clear":
         break;                

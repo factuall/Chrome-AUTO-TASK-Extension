@@ -3,18 +3,30 @@ var recordedTaskSteps = [];
 var startTime = 0;
 var endTime = 0;
 
+const MOUSE = {
+    x: 0,
+    y: 0
+};
+
+document.addEventListener('mousemove', (event) => {
+    MOUSE.x = event.clientX;
+    MOUSE.y = event.clientY;
+});
+
 //all info while recording is saved to array
 document.body.addEventListener("click", function (evt) {
     if(isAddonRecording){
         //object with coords .left .top
         let step = getOffset(evt.target);
-        
+
         //don't record delay on first click
         if(recordedTaskSteps.length != 0){
             endTime = new Date().getTime();
         }
         //add delay to the object
         step.wait = endTime - startTime;
+        step.top = MOUSE.x;
+        step.left = MOUSE.y;
         startTime = new Date().getTime();
         recordedTaskSteps.push(step);
     }
@@ -23,8 +35,25 @@ document.body.addEventListener("click", function (evt) {
 //handle messages from addon gui/popup
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        if(Array.isArray(request.message)){
+            recordedTaskSteps = request.message;
+            executeTask();
+        }
         if(request.message.startsWith("gui-")){
-            console.log("got the gui message");
+            switch(request.message){
+                case "gui-recording":
+                    console.log("recordiiing");
+                    recordedTaskSteps = [];
+                    isAddonRecording = true;
+                    startTime = new Date().getTime();
+                    endTime = new Date().getTime();
+                    sendMessageToAddon("bg-recording");
+                break;
+                case "gui-stop":
+                    isAddonRecording = false;
+                    sendMessageToAddon(recordedTaskSteps);
+                break;             
+            }
         }
         return;
         console.log(request.content);
@@ -52,7 +81,7 @@ chrome.runtime.onMessage.addListener(
 
 //send message to gui/popup
 function sendMessageToAddon(messageContent){
-    chrome.runtime.sendMessage({content: messageContent}, function(response) {
+    chrome.runtime.sendMessage({message: messageContent}, function(response) {
     });
 }
 
@@ -75,12 +104,14 @@ function click(x,y){
 function getOffset( el ) {
     var _x = 0;
     var _y = 0;
+    var _w = 0;
+    var _h = 0;
     while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
         _x += el.offsetLeft - el.scrollLeft;
         _y += el.offsetTop - el.scrollTop;
         el = el.offsetParent;
     }
-    return { top: _y, left: _x };
+    return { top: _y, left: _x};
 }
 
 //save when recording and clicked redirect
@@ -110,14 +141,15 @@ function sleep(ms) {
 var executingTask = false;
 const executeTask = async function(){
     executingTask = true;
+    console.log("executing");
     for (let index = 0; index < recordedTaskSteps.length; index++) {
         const step = recordedTaskSteps[index];
         await sleep(step.wait);
-        click(step.left + 5, step.top + 5);   
+        click(step.left, step.top);   
         console.log("clicking",step.left,step.top);
     }
     executingTask = false;
-    sendMessageToAddon("state:idle");
+    //sendMessageToAddon("state:idle");
 }
 
 /*chrome.runtime.sendMessage({message: "hi"}, function(response) {});

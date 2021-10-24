@@ -1,6 +1,7 @@
 var stateBox = document.getElementById("state");
 var tasksStepsList = document.getElementById("taskStepsList");
 var optionInputs = document.getElementsByClassName('optionInput');
+var taskSteps = [];
 
 //record button
 var startRecButton = document.getElementById("startRecording");
@@ -39,7 +40,32 @@ function shareMessage(messageContent){
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log(request.content);
-    
-
+    if(Array.isArray(request.message)){
+            taskSteps = request.message;
+            renderSteps();
+    }
 });
+
+function renderSteps(){
+    tasksStepsList.innerHTML = "";
+    //gowno kurwa na szybko for title
+    if(taskSteps.length > 0) {
+        let stepLine = document.createElement("div");
+        stepLine.append("Steps in given task:");
+        tasksStepsList.append(stepLine);
+        let gowno = document.createElement("div");
+        gowno.style.height = "5px";
+        tasksStepsList.append(gowno);
+    }
+    //adding each task step
+    taskSteps.forEach(element => {
+        let stepLine = document.createElement("div");
+        stepLine.id = "stepLine";
+        tasksStepsList.append(stepLine);
+        stepLine.append("Wait: " + element.wait/1000 + "s then click on X:" + element.left + " Y:" + element.top);
+    });
+}
+
+
+//on popup
+shareMessage("gui-popup");

@@ -73,13 +73,12 @@ function sendMessageToTab(messageContent){
 //handle messages from site JS
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        return;
         console.log(request.content);
         if(Array.isArray(request.content)){
-            taskSteps = request.content;
-            chrome.storage.local.set({taskStepsStorage: taskSteps}, function() {});
+            taskSteps = request.message;
             renderSteps();
         }else if(request.content.constructor === String){
+            return;
             if(request.content == "state:idle"){
                 stateBox.innerHTML = "Idle";
                 stateBox.style.backgroundColor = "bisque";
