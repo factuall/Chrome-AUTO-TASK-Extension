@@ -50,6 +50,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             changingPageTaskIndex = index;
         }else if(request.message.startsWith("input-")){
             changeState(request.message);
+        }else if(request.message.startsWith("bookmark")){
+            let index = request.message.substring(8);
+            console.log(index);
+            openBookMark(index);
+            
         }
 
     }
@@ -76,4 +81,65 @@ function changeState(newState){
         break;                
     }
     if(passStateToSite) sendToTab(newState);
+}
+
+function openBookMark(index){
+    //save
+    if(taskSteps.length > 0){
+        switch(index){
+            case "0":
+                chrome.storage.local.set({cchbw0: taskSteps}, ()=>{});
+                break;
+            case "1":
+                chrome.storage.local.set({cchbw1: taskSteps}, ()=>{});
+                break;
+            case "2":
+                chrome.storage.local.set({cchbw2: taskSteps}, ()=>{});
+                break;
+            case "3":
+                chrome.storage.local.set({cchbw3: taskSteps}, ()=>{});
+                break;
+        }
+        console.log("saved");
+    }else{ //load
+        let storageData = [];
+        switch(index){
+            case "0": 
+                chrome.storage.local.get(["cchbw0"], (result)=>{
+                    storageData = result.cchbw0;
+                    if(Array.isArray(storageData)){
+                        taskSteps = storageData;
+                        sendToPopup(taskSteps);
+                    }
+                });
+                break;
+            case "1":
+                chrome.storage.local.get(["cchbw1"], (result)=>{
+                    storageData = result.cchbw1;
+                    if(Array.isArray(storageData)){
+                        taskSteps = storageData;
+                        sendToPopup(taskSteps);
+                    }
+                });
+                break;
+            case "2":
+                chrome.storage.local.get(["cchbw2"], (result)=>{
+                    storageData = result.cchbw2;
+                    if(Array.isArray(storageData)){
+                        taskSteps = storageData;
+                        sendToPopup(taskSteps);
+                    }
+                });
+                break;
+            case "3":
+                chrome.storage.local.get(["cchbw3"], (result)=>{
+                    storageData = result.cchbw3;
+                    if(Array.isArray(storageData)){
+                        taskSteps = storageData;
+                        sendToPopup(taskSteps);
+                    }
+                });
+                break;
+        }
+    }
 }

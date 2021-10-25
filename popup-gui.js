@@ -59,6 +59,19 @@ function renderSteps(){
     });
 }
 
+//hardcoded bookmark
+document.getElementById("bookmark0").addEventListener('click', async () =>{ 
+    sendToAddon("bookmark0");
+});
+document.getElementById("bookmark1").addEventListener('click', async () =>{ 
+    sendToAddon("bookmark1");
+});
+document.getElementById("bookmark2").addEventListener('click', async () =>{ 
+    sendToAddon("bookmark2");
+});
+document.getElementById("bookmark3").addEventListener('click', async () =>{ 
+    sendToAddon("bookmark3");
+});
 
 //on popup
 sendToAddon("input-popup");
