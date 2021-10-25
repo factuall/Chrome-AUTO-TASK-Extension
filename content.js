@@ -45,33 +45,31 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(Array.isArray(request.message)){
             recordedTaskSteps = request.message;
-        }
-        if(request.message.startsWith("gui-")){
+        }else{
             switch(request.message){
-                case "gui-recording":
+                case "input-recording":
                     console.log("recordiiing");
                     isAddonRecording = true;
                     startTime = new Date().getTime();
                     endTime = new Date().getTime();
-                    sendMessageToAddon("bg-recording");
                 break;
-                case "gui-stop":
+                case "input-stop":
                     isAddonRecording = false;
                     sendMessageToAddon(recordedTaskSteps);
                 break;             
-                case "gui-clear":
+                case "input-clear":
                     recordedTaskSteps = [];
                 break;
-                case "gui-play":
+                case "input-play":
                     executingTask = true;
                     executeTask();
                 break;
             }
-        }
-        if(request.message.startsWith("index-")){
-            let i = request.message.substring(6);
-            index = parseInt(i);
-            console.log(index);
+            if(request.message.startsWith("index-")){
+                let i = request.message.substring(6);
+                index = parseInt(i);
+                console.log(index);
+            }
         }
     }
 );
@@ -115,11 +113,11 @@ function getOffset( el ) {
 window.onbeforeunload = function(){
     if(isAddonRecording){
         sendMessageToAddon(recordedTaskSteps);
-        sendMessageToAddon("bg-unloading-while-recording");
+        sendMessageToAddon("resume-recording");
     }
     if(executingTask){
         console.log(index);
-        sendMessageToAddon("bg-unloading-while-playing-" + (index+1));
+        sendMessageToAddon("resume-playing-" + (index+1));
     }
 }
 
@@ -127,7 +125,6 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
   
-
 const executeTask = async function(){
     console.log("executing");
     for (index; index < recordedTaskSteps.length; index++) {
@@ -144,4 +141,4 @@ const executeTask = async function(){
     executingTask = false;
 }
 
-sendMessageToAddon("bg-loaded");
+sendMessageToAddon("page-loaded");

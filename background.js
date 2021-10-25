@@ -20,32 +20,38 @@ function sendToTab(messageContent){
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(Array.isArray(request.message)){
         taskSteps = request.message;
-    }else if(request.message.startsWith('gui-')){
-        if(request.message == "gui-popup"){
-            sendToPopup(taskSteps);
+    }else{
+        switch(request.message){
+            case "input-popup":
+                sendToPopup(taskSteps);
+            break;
+            case "page-loaded":
+                if(changingPage){
+                    sendToTab(taskSteps);
+                    changeState("input-recording");
+                    changingPage = false;
+                }
+                if(changingPagePlaying){
+                    sendToTab("index-"+changingPageTaskIndex);
+                    sendToTab(taskSteps);
+                    sendToTab("input-play");
+                    changingPagePlaying = false;
+                }
+            break;
+            case "resume-recording":
+                changingPage = true;
+            break;
         }
-        changeState(request.message);
-    }else if(request.message == "bg-loaded"){
-        if(changingPage){
-            sendToTab(taskSteps);
-            changeState("gui-recording");
+        if(request.message.startsWith("resume-playing-")){
+            let index = request.message.substring(15);
+            console.log("changing page while playing " + index);
             changingPage = false;
+            changingPagePlaying = true;
+            changingPageTaskIndex = index;
+        }else if(request.message.startsWith("input-")){
+            changeState(request.message);
         }
-        if(changingPagePlaying){
-            sendToTab("index-"+changingPageTaskIndex);
-            sendToTab(taskSteps);
-            sendToTab("gui-play");
-            changingPagePlaying = false;
-        }
-    }else if(request.message == "bg-unloading-while-recording"){
-        changingPage = true;
-    }
-    if(request.message.startsWith("bg-unloading-while-playing-")){
-        let index = request.message.substring(27);
-        console.log("changing page while playing " + index);
-        changingPage = false;
-        changingPagePlaying = true;
-        changingPageTaskIndex = index;
+
     }
 });
 
@@ -53,18 +59,18 @@ function changeState(newState){
     addonState = newState;
     let passStateToSite = false;
     switch(newState){
-        case "gui-recording":
+        case "input-recording":
             passStateToSite = true;
         break;
-        case "gui-stop":
+        case "input-stop":
             passStateToSite = true;
         break;
-        case "gui-play":
+        case "input-play":
             sendToTab("index-0");
             sendToTab(taskSteps);
             passStateToSite = true;
         break;
-        case "gui-clear":
+        case "input-clear":
             passStateToSite = true;
             taskSteps = [];
         break;                

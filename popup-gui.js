@@ -6,26 +6,26 @@ var taskSteps = [];
 //record button
 var startRecButton = document.getElementById("startRecording");
 startRecButton.addEventListener('click', async () =>{ 
-    sendToAddon("gui-recording");
+    sendToAddon("input-recording");
 });
 
 //stop button clicked
 var stopRecButton = document.getElementById("stopRecording");
 stopRecButton.addEventListener('click', async () =>{
-    sendToAddon("gui-stop");
+    sendToAddon("input-stop");
 });
 
 //execute button clicked
 var executeTaskButton = document.getElementById("doTask");
 executeTaskButton.addEventListener('click', async () =>{
-    sendToAddon("gui-play");
+    sendToAddon("input-play");
 });
 
 var clearStepsButton = document.getElementById("clearRecording");
 clearStepsButton.addEventListener('click', async () =>{
     taskSteps = [];
     renderSteps();
-    sendToAddon("gui-clear");
+    sendToAddon("input-clear");
 });
 
 function sendToAddon(messageContent){
@@ -61,4 +61,4 @@ function renderSteps(){
 
 
 //on popup
-sendToAddon("gui-popup");
+sendToAddon("input-popup");
