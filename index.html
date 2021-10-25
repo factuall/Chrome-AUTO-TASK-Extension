@@ -11,19 +11,27 @@
 
   <body>
     <div class="addoncontent">
-      <button id="startRecording">Start Recording</button>
-      <button id="stopRecording">Stop Recording</button>
-      <button id="clearRecording">Clear Recorded Moves</button>
-      <button id="doTask">Execute Recorded Task</button>
+      <div id="startRecording" class="controlButton">Start Recording</div>
+      <div id="stopRecording" class="controlButton">Stop Recording</div>
+      <div id="clearRecording" class="controlButton">Clear Recorded Moves</div>
+      <div id="doTask" class="controlButton">Execute Recorded Task</div>
     </div>
 
     <div id="taskStepsList"></div>
     <div class="options">
-      <div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Continue after page change</div>
+      <!---<div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Continue after page change</div>
       <div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Test option asdd</div>
       <div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Another one asdasd</div>
       <div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> adah</div>
+      --->
+    </div>
+    <div class="bookmarks">
+      <div>
+        <div id="bookmark" class="bookmarkButton">Bookmark A</div>
+        <div class="bookmarkSaveButton">save</div>
+      </div>
       
+
     </div>
     <script src = "popup-gui.js"></script>
   </body>
