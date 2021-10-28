@@ -1,4 +1,4 @@
-var isAddonRecording = false;
+/*var isAddonRecording = false;
 var recordedTaskSteps = [];
 var startTime = 0;
 var endTime = 0;
@@ -142,3 +142,4 @@ const executeTask = async function(){
 }
 
 sendMessageToAddon("page-loaded");
+*/
