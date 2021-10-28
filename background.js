@@ -1,4 +1,4 @@
-var addonState = "";
+/*var addonState = "";
 var taskSteps = [];
 var changingPage = false;
 var changingPagePlaying = false;
@@ -142,4 +142,4 @@ function openBookMark(index){
                 break;
         }
     }
-}
+}*/
