@@ -15,7 +15,7 @@ function getElementPlacement(source) {
 }
 
 //simulate click
-function click(x,y){
+function click(x: number, y: number){
     var ev = document.createEvent("MouseEvent");
     var el = document.elementFromPoint(x,y);
     ev.initMouseEvent(
