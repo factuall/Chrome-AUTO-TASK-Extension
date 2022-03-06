@@ -128,13 +128,13 @@ function sleep(ms) {
 const executeTask = async function(){
     console.log("executing");
     for (index; index < recordedTaskSteps.length; index++) {
-        if(!executingTask){
-            break;
-        }
+        if(!executingTask)  break;
         const step = recordedTaskSteps[index];
         await sleep(step.wait);
+        if(!executingTask)  break;
         window.scrollTo(0, step.scroll);
         await sleep(10);
+        if(!executingTask)  break;
         click(step.left, step.top);   
         console.log("clicking",step.left,step.top);
     }

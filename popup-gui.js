@@ -28,6 +28,11 @@ clearStepsButton.addEventListener('click', async () =>{
     sendToAddon("input-clear");
 });
 
+var stopExecutingButton = document.getElementById("stop-task");
+stopExecutingButton.addEventListener('click', async () =>{
+    sendToAddon("input-stop-doing");
+});
+
 function sendToAddon(messageContent){
     chrome.runtime.sendMessage({message: messageContent}, function(response) {});
 };

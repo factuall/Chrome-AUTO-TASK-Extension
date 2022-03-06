@@ -79,6 +79,10 @@ function changeState(newState){
             passStateToSite = true;
             taskSteps = [];
         break;                
+        case "input-stop-doing":
+            passStateToSite = true;
+
+        break;   
     }
     if(passStateToSite) sendToTab(newState);
 }
