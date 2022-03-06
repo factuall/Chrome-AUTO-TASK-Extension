@@ -65,6 +65,7 @@ chrome.runtime.onMessage.addListener(
                     executeTask();
                 break;
             }
+            sendMessageToAddon("page-state "+isAddonRecording+":"+executingTask);
             if(request.message.startsWith("index-")){
                 let i = request.message.substring(6);
                 index = parseInt(i);
@@ -139,6 +140,7 @@ const executeTask = async function(){
         console.log("clicking",step.left,step.top);
     }
     executingTask = false;
+    sendMessageToAddon("page-state "+isAddonRecording+":"+executingTask);
 }
 
 sendMessageToAddon("page-loaded");

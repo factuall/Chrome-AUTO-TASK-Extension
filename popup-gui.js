@@ -41,6 +41,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(Array.isArray(request.message)){
         taskSteps = request.message;
         renderSteps();
+    }else if(request.message.startsWith("page-state")){
+        let states = (request.message.split(" ")[1]).split(":");
+        stopRecButton.style.color = states[0] == "true"? "#f2d75e" : "#d6d6c3";
+        stopExecutingButton.style.color = states[1] == "true"? "#f2d75e" : "#d6d6c3";
     }
 });
 

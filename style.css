@@ -43,7 +43,7 @@ body{
     line-height: 150%;
     text-align: center;
     padding: 2px 0px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
     font-weight: 400;
     font-size: 16px;
     

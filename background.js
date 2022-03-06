@@ -24,6 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         switch(request.message){
             case "input-popup":
                 sendToPopup(taskSteps);
+                sendToTab("get-state");
             break;
             case "page-loaded":
                 if(changingPage){
