@@ -6,18 +6,21 @@
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
     <meta http-equiv = "X-UA-Compatible" content = "ie=edge">
     <title>Cheil click helper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href = "style.css" rel = "stylesheet" type = "text/css">
   </head>
 
   <body>
-    <div class="addoncontent">
-      <div id="startRecording" class="controlButton">Start Recording</div>
-      <div id="stopRecording" class="controlButton">Stop Recording</div>
-      <div id="clearRecording" class="controlButton">Clear Recorded Moves</div>
-      <div id="doTask" class="controlButton">Execute Recorded Task</div>
+    <div class="addon-content">
+      <div id="start-recording" class="control button">Start Recording</div>
+      <div id="stop-recording" class="control button">Stop Recording</div>
+      <div id="do-task" class="control button">Execute Recorded Task</div>
+      <div id="clear-recording" class="control button">Clear Recorded Moves</div>
     </div>
 
-    <div id="taskStepsList"></div>
+    <div id="task-steps-list"></div>
     <div class="options">
       <!---<div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Continue after page change</div>
       <div id="option"><input type="checkbox" id="optionContinue" class="optionInput"> Test option asdd</div>
@@ -26,10 +29,10 @@
       --->
     </div>
     <div class="bookmarks">
-        <div id="bookmark0" class="bookmarkButton">Bookmark A</div>
-        <div id="bookmark1" class="bookmarkButton">Bookmark B</div>
-        <div id="bookmark2" class="bookmarkButton">Bookmark C</div>
-        <div id="bookmark3" class="bookmarkButton">Bookmark D</div>
+        <div id="bookmark0" class="bookmark button">Bookmark A</div>
+        <div id="bookmark1" class="bookmark button">Bookmark B</div>
+        <div id="bookmark2" class="bookmark button">Bookmark C</div>
+        <div id="bookmark3" class="bookmark button">Bookmark D</div>
         
     </div>
     Click on bookmark to save current task, click with empty task list to load.      
